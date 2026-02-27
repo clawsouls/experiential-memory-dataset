@@ -24,7 +24,7 @@ my-persona/
 ```json
 {
   "version": "1.0",
-  "name": "Brad",
+  "name": "Agent B",
   "description": "A coding agent with personality",
   "author": "ClawSouls",
   "license": "CC-BY-4.0",
