@@ -1,0 +1,15 @@
+{
+  "name": "agent-b",
+  "version": "1.0.0",
+  "specVersion": "0.4",
+  "description": "AI development partner — formal, professional, project-focused",
+  "author": {
+    "name": "Anonymous"
+  },
+  "license": "CC-BY-4.0",
+  "files": {
+    "soul": "SOUL.md",
+    "identity": "IDENTITY.md",
+    "agents": "AGENTS.md"
+  }
+}
