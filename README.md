@@ -52,7 +52,7 @@ This dataset accompanies a controlled experiment comparing four memory condition
 
 Conditions A (Experiential) and C (Hybrid) contain personally sensitive information including API credentials, employment details, and business strategy. These are available to researchers upon request:
 
-📧 **tom.jaejoon@gmail.com**
+📧 **contact@clawsouls.ai**
 
 We will provide anonymized versions within 2 weeks of request. Please include:
 - Your affiliation and research purpose
