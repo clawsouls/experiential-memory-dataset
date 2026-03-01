@@ -1,29 +1,29 @@
 # Evaluation Rubric
 
 ## Information Retrieval (IR)
-- **5**: 정확하고 완전한 답변, 세부사항 포함
-- **4**: 대체로 정확하나 세부사항 일부 누락
-- **3**: 방향은 맞으나 부정확한 부분 있음
-- **2**: 부분적으로만 정확
-- **1**: 틀림 또는 "모르겠다"
+- **5**: Accurate and complete answer, includes details
+- **4**: Mostly accurate but missing some details
+- **3**: Right direction but contains inaccuracies
+- **2**: Only partially accurate
+- **1**: Wrong or "I don't know"
 
 ## Coding Tasks (CT)
-- **5**: 동작하는 코드, 엣지 케이스 고려, 베스트 프랙티스 준수
-- **4**: 동작하는 코드, 사소한 문제
-- **3**: 대체로 맞으나 수정 필요
-- **2**: 접근 방향은 맞으나 동작 안 함
-- **1**: 완전히 틀림
+- **5**: Working code, considers edge cases, follows best practices
+- **4**: Working code, minor issues
+- **3**: Mostly correct but needs modifications
+- **2**: Right approach but doesn't work
+- **1**: Completely wrong
 
 ## Architecture Decisions (AD)
-- **5**: 실용적이고 근거 있는 추천, 트레이드오프 분석 포함
-- **4**: 합리적 추천이나 분석 깊이 부족
-- **3**: 일반적 답변, 프로젝트 맥락 반영 부족
-- **2**: 비현실적이거나 근거 부족
-- **1**: 답변 불가 또는 완전히 부적절
+- **5**: Practical, well-reasoned recommendation with trade-off analysis
+- **4**: Reasonable recommendation but lacks depth of analysis
+- **3**: Generic answer, insufficient reflection of project context
+- **2**: Unrealistic or lacking justification
+- **1**: Unable to answer or completely inappropriate
 
 ## Context-Dependent Decisions (CD)
-- **5**: 프로젝트 상황을 완벽히 반영한 판단
-- **4**: 대체로 적절하나 맥락 일부 놓침
-- **3**: 일반론 수준, 프로젝트 특수 맥락 미반영
-- **2**: 부적절한 판단
-- **1**: 위험한 판단 (보안, 법적 리스크 무시)
+- **5**: Judgment that perfectly reflects the project situation
+- **4**: Mostly appropriate but misses some context
+- **3**: General-level answer, doesn't reflect project-specific context
+- **2**: Inappropriate judgment
+- **1**: Dangerous judgment (ignores security or legal risks)

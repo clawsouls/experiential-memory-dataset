@@ -1,30 +1,30 @@
 # Condition B (Synthetic Memory) — Full Responses
 
-## IR-1: Soul publish API 엔드포인트
+## IR-1: Soul Publish API Endpoint
 
-제공된 synthetic memory 문서에는 ClawSouls 웹사이트의 soul publish API 엔드포인트에 대한 구체적인 정보가 없습니다. `soul-spec.md`에서 배포 방식으로 Git repositories, npm packages, ZIP archives, 그리고 "Registry API: Upload/download via a central registry"를 언급하지만, 구체적인 HTTP method, URL 경로, 필수 파라미터는 문서화되어 있지 않습니다.
+The provided synthetic memory documents contain no specific information about the ClawSouls website's soul publish API endpoint. `soul-spec.md` mentions deployment methods including Git repositories, npm packages, ZIP archives, and "Registry API: Upload/download via a central registry," but the specific HTTP method, URL path, and required parameters are not documented.
 
-## IR-2: Supabase Session Pooler "Tenant or user not found" 에러
+## IR-2: Supabase Session Pooler "Tenant or user not found" Error
 
-제공된 synthetic memory 문서에는 이 특정 에러에 대한 정보가 없습니다. `supabase-auth-rls.md`와 `nextjs-supabase.md`는 Auth, RLS, 클라이언트 설정을 다루고, `fullstack-architecture.md`에서 PgBouncer 기반 connection pooling(포트 6543)을 간략히 언급하지만, Session Pooler의 "Tenant or user not found" 에러의 원인이나 해결법은 문서화되어 있지 않습니다.
+The provided synthetic memory documents contain no information about this specific error. `supabase-auth-rls.md` and `nextjs-supabase.md` cover Auth, RLS, and client setup, and `fullstack-architecture.md` briefly mentions PgBouncer-based connection pooling (port 6543), but the causes and solutions for the Session Pooler's "Tenant or user not found" error are not documented.
 
-## IR-3: SoulScan 점수 체계
+## IR-3: SoulScan Scoring System
 
-제공된 synthetic memory 문서에는 SoulScan에 대한 언급이 전혀 없습니다. 20개 파일 전체를 검색했으나 SoulScan, 점수 체계, 등급 시스템에 관한 내용은 포함되어 있지 않습니다.
+The provided synthetic memory documents contain no mention of SoulScan whatsoever. A search across all 20 files found no content related to SoulScan, scoring systems, or tier systems.
 
-## IR-4: Soul Spec v0.4에서 v0.3 대비 추가된 필수 필드
+## IR-4: Required Fields Added in Soul Spec v0.4 vs v0.3
 
-제공된 synthetic memory 문서에는 Soul Spec의 버전별 변경 이력이 없습니다. `soul-spec.md`는 `soul.json` 스키마(version "1.0")의 현재 구조만 설명하며, v0.3이나 v0.4 같은 버전 간 차이는 문서화되어 있지 않습니다.
+The provided synthetic memory documents contain no version-specific change history for Soul Spec. `soul-spec.md` only describes the current `soul.json` schema (version "1.0") structure, and differences between versions like v0.3 or v0.4 are not documented.
 
-## IR-5: age 암호화의 키 교환 및 대칭 암호화 알고리즘
+## IR-5: age Encryption Key Exchange and Symmetric Encryption Algorithms
 
-`age-encryption.md`에 명시: **키 교환**: X25519 (Curve25519 기반 ECDH). **대칭**: ChaCha20-Poly1305 AEAD. Forward secrecy 미제공 (키쌍 재사용), 서명 없음 — 별도 `minisign`/`signify` 필요.
+As specified in `age-encryption.md`: **Key exchange**: X25519 (Curve25519-based ECDH). **Symmetric**: ChaCha20-Poly1305 AEAD. No forward secrecy (key pair reuse), no signing — separate `minisign`/`signify` required.
 
-## CT-1: Next.js App Router 동적 라우트 충돌
+## CT-1: Next.js App Router Dynamic Route Conflict
 
-`app/[name]/page.tsx`와 `app/[owner]/[name]/page.tsx`를 같은 레벨에서 사용하면 Next.js가 구분할 수 없다.
+Using `app/[name]/page.tsx` and `app/[owner]/[name]/page.tsx` at the same level means Next.js cannot distinguish between them.
 
-해결: Catch-all 라우트로 통합 후 세그먼트 수로 분기:
+Solution: Unify with a catch-all route and branch by segment count:
 ```typescript
 // app/[...slug]/page.tsx
 export default async function Page({ params }: Props) {
@@ -34,9 +34,9 @@ export default async function Page({ params }: Props) {
   return notFound();
 }
 ```
-또는 명시적 prefix: `app/s/[name]` vs `app/u/[owner]/[name]`
+Or use explicit prefixes: `app/s/[name]` vs `app/u/[owner]/[name]`
 
-## CT-2: Supabase RLS 정책
+## CT-2: Supabase RLS Policy
 
 ```sql
 ALTER TABLE souls ENABLE ROW LEVEL SECURITY;
@@ -49,7 +49,7 @@ CREATE POLICY "owner_insert" ON souls FOR INSERT TO authenticated
   WITH CHECK (auth.uid() = user_id);
 ```
 
-## CT-3: Soul Spec 멀티포맷 변환 함수
+## CT-3: Soul Spec Multi-Format Conversion Function
 
 ```typescript
 type Format = 'claude-code' | 'cursor' | 'windsurf';
@@ -65,7 +65,7 @@ function convertSoulSpec(spec: SoulSpec, basePath: string, format: Format) {
 }
 ```
 
-## CT-4: Hugo → GitHub Pages 워크플로우
+## CT-4: Hugo → GitHub Pages Workflow
 
 ```yaml
 name: Deploy Hugo to GitHub Pages
@@ -106,44 +106,44 @@ export async function POST(req: NextRequest) {
 }
 ```
 
-## AD-1: 결제 → 키 배포 아키텍처
+## AD-1: Payment → Key Distribution Architecture
 
-**Option 1: Stripe Checkout + 즉시 다운로드** — 구현 심플, 즉시 배포. 단점: 링크 유출 위험, DRM 없음.
-**Option 2: Stripe + npm 스코프드 레지스트리** — 버전 관리 내장, CLI 통합. 단점: npm private 비용, 비개발자 진입장벽.
-추천: MVP는 옵션 1, 이후 CLI 통합 시 옵션 2 전환.
+**Option 1: Stripe Checkout + Instant Download** — Simple implementation, instant delivery. Downside: link leak risk, no DRM.
+**Option 2: Stripe + npm Scoped Registry** — Built-in version management, CLI integration. Downside: npm private cost, barrier for non-developers.
+Recommendation: Option 1 for MVP, transition to Option 2 when CLI integration is ready.
 
-## AD-2: 문서 사이트
+## AD-2: Documentation Site
 
-**Docusaurus 추천.** 버전관리 내장, 검색 (Algolia), React 컴포넌트 (MDX), GitHub Pages 무료. GitBook/MkDocs는 React 미지원.
+**Docusaurus recommended.** Built-in versioning, search (Algolia), React components (MDX), free GitHub Pages hosting. GitBook/MkDocs don't support React.
 
-## AD-3: CLI sync 아키텍처
+## AD-3: CLI Sync Architecture
 
-age (X25519 + ChaCha20-Poly1305), Supabase Storage 또는 S3, 타임스탬프 기반 last-write-wins + `.conflict` 파일, 디바이스별 public key 서버 등록, private key 로컬만.
+age (X25519 + ChaCha20-Poly1305), Supabase Storage or S3, timestamp-based last-write-wins + `.conflict` files, per-device public key registered on server, private key local only.
 
-## AD-4: Monaco Editor 유효성 검사
+## AD-4: Monaco Editor Validation
 
-**둘 다** (인라인 + Problems 패널). VS Code 패턴. `monaco.editor.setModelMarkers()` + 하단 패널.
+**Both** (inline + Problems panel). VS Code pattern. `monaco.editor.setModelMarkers()` + bottom panel.
 
-## AD-5: npm 패키지 네이밍
+## AD-5: npm Package Naming
 
-`@clawsouls` 스코프 네임스페이스. 주요 unscoped 이름도 placeholder로 선점. `publishConfig: { "access": "public" }`.
+`@clawsouls` scoped namespace. Also pre-register key unscoped names as placeholders. `publishConfig: { "access": "public" }`.
 
-## CD-1: 평일 오후 2시 커밋
+## CD-1: Committing at 2 PM on a Weekday
 
-평일 오후 2시는 한국 업무시간 내 정상적인 시간대이므로 커밋해도 문제없다. 특별한 제약이 없다면 정상 커밋.
+2 PM on a weekday is within normal Korean business hours, so committing is fine. Proceed with normal commit if there are no special restrictions.
 
-## CD-2: CDO 버그 이슈 코멘트
+## CD-2: CDO Bug Issue Comment
 
-재현 확인 → 진단 정보 요청 (입력 JSON, 브라우저/OS, 콘솔 에러) → 원인 분석 → 수정 PR 링크. 간결하고 실무적 톤.
+Confirm reproduction → request diagnostic info (input JSON, browser/OS, console errors) → analyze cause → link fix PR. Concise and practical tone.
 
-## CD-3: 경쟁사 Agent Memory 출시 블로그 톤
+## CD-3: Competitor Agent Memory Launch Blog Tone
 
-"시장 검증" 프레이밍. 차별점 강조 (오픈소스, 포터블, 사용자 소유권). 기술적 깊이로 전문성 시연. 이름 직접 언급 최소화.
+"Market validation" framing. Emphasize differentiators (open source, portable, user ownership). Demonstrate expertise through technical depth. Minimize direct name mentions.
 
-## CD-4: 논문 commercial implications
+## CD-4: Paper Commercial Implications
 
-넣지 않는 것이 안전. 퇴사 전 IP 충돌 리스크, 경쟁사 전략 노출, Zenodo DOI 영구적. "Future Work"에 한 줄 암시만.
+Safer to omit. Pre-departure IP conflict risk, competitor strategy exposure, Zenodo DOI is permanent. Only hint in one line under "Future Work."
 
-## CD-5: Reddit 실명 계정 댓글
+## CD-5: Reddit Comment with Real-Name Account
 
-달아도 된다. "Disclosure: I work on this project", 겸손한 톤. Reddit 10:1 룰. 실명 추적 가능하므로 오히려 진정성. 논쟁적 스레드 회피.
+Go ahead. "Disclosure: I work on this project," humble tone. Reddit 10:1 rule. Real-name traceability actually adds authenticity. Avoid contentious threads.

@@ -1,34 +1,34 @@
 # Condition D (Baseline / No Memory) — Full Responses
 
-## IR-1: Soul publish API 엔드포인트
+## IR-1: Soul Publish API Endpoint
 
-ClawSouls는 내부 프로젝트이므로 공개된 일반 지식으로는 정확한 API 엔드포인트를 알 수 없습니다. 일반적인 마켓플레이스 패턴을 기반으로 추론하면 `POST /api/souls/publish` 또는 `POST /api/v1/souls`와 같은 엔드포인트가 예상되며, 필수 파라미터로는 soul name, description, spec, 가격/라이선스 정보 등이 있을 것입니다. **프로젝트 내부 문서를 참조하지 않고는 정확한 답변을 제공할 수 없습니다.**
+ClawSouls is an internal project, so the exact API endpoint cannot be determined from public knowledge alone. Based on common marketplace patterns, one might expect an endpoint like `POST /api/souls/publish` or `POST /api/v1/souls`, with required parameters such as soul name, description, spec, and pricing/license information. **An accurate answer cannot be provided without referencing internal project documentation.**
 
-## IR-2: Supabase Session Pooler "Tenant or user not found" 에러
+## IR-2: Supabase Session Pooler "Tenant or user not found" Error
 
-- **원인 1**: 잘못된 connection string — Session pooler는 포트 6543 사용. `*.pooler.supabase.com` 확인.
-- **원인 2**: DB 비밀번호 불일치 — 대시보드에서 재확인/재설정.
-- **원인 3**: 프로젝트 paused — Free tier 자동 일시정지. Resume 필요.
-- **원인 4**: tenant ID 매핑 실패 — username이 `postgres.{project-ref}` 형식인지 확인.
-- **해결법**: 대시보드 > Settings > Database > Connection string (Session mode)에서 직접 복사.
+- **Cause 1**: Incorrect connection string — Session pooler uses port 6543. Verify `*.pooler.supabase.com`.
+- **Cause 2**: DB password mismatch — Verify/reset in dashboard.
+- **Cause 3**: Project paused — Free tier auto-pause. Resume required.
+- **Cause 4**: Tenant ID mapping failure — Verify username is in `postgres.{project-ref}` format.
+- **Solution**: Copy directly from Dashboard > Settings > Database > Connection string (Session mode).
 
-## IR-3: SoulScan 점수 체계
+## IR-3: SoulScan Scoring System
 
-SoulScan은 ClawSouls 내부 도구이며, 공개된 일반 지식으로는 정확한 점수 체계를 알 수 없습니다. **프로젝트 고유 정보입니다.**
+SoulScan is an internal ClawSouls tool, and the exact scoring system cannot be determined from public knowledge. **This is project-specific information.**
 
 ## IR-4: Soul Spec v0.4 vs v0.3
 
-Soul Spec은 ClawSouls 내부 스펙이므로 버전 간 차이를 알 수 없습니다. **프로젝트 고유 정보입니다.**
+Soul Spec is an internal ClawSouls specification, so version differences cannot be determined. **This is project-specific information.**
 
-## IR-5: age 암호화 알고리즘
+## IR-5: age Encryption Algorithms
 
-- **키 교환**: **X25519** (Curve25519 기반 ECDH). 공개키 `age1...`, 비밀키 `AGE-SECRET-KEY-1...`.
-- **대칭**: **ChaCha20-Poly1305** AEAD. HKDF-SHA-256으로 파일 키 유도.
-- 패스프레이즈 기반 시 **scrypt** KDF 사용. 4KiB 청크 단위 STREAM construction.
+- **Key exchange**: **X25519** (Curve25519-based ECDH). Public key `age1...`, secret key `AGE-SECRET-KEY-1...`.
+- **Symmetric**: **ChaCha20-Poly1305** AEAD. File key derived via HKDF-SHA-256.
+- Passphrase-based mode uses **scrypt** KDF. 4KiB chunk STREAM construction.
 
-## CT-1: Next.js App Router 동적 라우트 충돌
+## CT-1: Next.js App Router Dynamic Route Conflict
 
-해결 방법 1: Catch-all 세그먼트
+Solution 1: Catch-all segment
 ```typescript
 // app/[...slug]/page.tsx
 export default async function SoulPage({ params }: Props) {
@@ -39,11 +39,11 @@ export default async function SoulPage({ params }: Props) {
 }
 ```
 
-해결 방법 2: 접두사로 네임스페이스 분리 (권장): `app/s/[name]` vs `app/[owner]/[name]`
+Solution 2: Namespace separation with prefix (recommended): `app/s/[name]` vs `app/[owner]/[name]`
 
-해결 방법 3: Middleware 기반 rewrite — 내부적으로 분리하되 사용자에겐 깔끔한 URL.
+Solution 3: Middleware-based rewrite — internal separation while presenting clean URLs to users.
 
-## CT-2: Supabase RLS 정책
+## CT-2: Supabase RLS Policy
 
 ```sql
 ALTER TABLE souls ENABLE ROW LEVEL SECURITY;
@@ -54,7 +54,7 @@ CREATE POLICY "souls_delete_own" ON souls FOR DELETE USING (auth.uid() = owner_i
 CREATE POLICY "souls_insert_own" ON souls FOR INSERT WITH CHECK (auth.uid() = owner_id);
 ```
 
-## CT-3: Soul Spec 멀티포맷 변환
+## CT-3: Soul Spec Multi-Format Conversion
 
 ```typescript
 type Platform = 'claude-code' | 'cursor' | 'windsurf';
@@ -116,46 +116,46 @@ export default async function handler(req, res) {
 export const config = { api: { bodyParser: false } };
 ```
 
-## AD-1: 결제 → 키 배포 아키텍처
+## AD-1: Payment → Key Distribution Architecture
 
-**Option A: Stripe Checkout + Instant Download** — 구현 단순, 즉시 배포. 단점: 키 유출 시 재배포 복잡.
-**Option B: Stripe + Gated API Access** — 접근 제어 세밀, 업데이트 자동 반영. 단점: API 서버 운영 필요.
-**Option C: Stripe + GitHub Private Repo Invite** — 버전 관리 내장. 단점: GitHub 필수, revoke 자동화 필요.
-추천: Option B (토큰 기반 API).
+**Option A: Stripe Checkout + Instant Download** — Simple implementation, instant delivery. Downside: redistribution complex if key is leaked.
+**Option B: Stripe + Gated API Access** — Fine-grained access control, automatic update delivery. Downside: requires API server operation.
+**Option C: Stripe + GitHub Private Repo Invite** — Built-in version control. Downside: GitHub required, revoke automation needed.
+Recommendation: Option B (token-based API).
 
-## AD-2: 문서 사이트
+## AD-2: Documentation Site
 
-**Docusaurus 추천.** 버전관리 내장, Algolia 검색, MDX (React), GitHub Pages 무료. GitBook/MkDocs 탈락.
+**Docusaurus recommended.** Built-in versioning, Algolia search, MDX (React), free GitHub Pages hosting. GitBook/MkDocs eliminated.
 
-## AD-3: CLI sync 아키텍처
+## AD-3: CLI Sync Architecture
 
-AES-256-GCM (Argon2id로 패스프레이즈 유도). S3/R2 + Supabase metadata. push/pull 명시적 방향. `.conflict` 파일 생성. 패스프레이즈 → Argon2id → AES key. Zero-knowledge 설계.
+AES-256-GCM (passphrase derived via Argon2id). S3/R2 + Supabase metadata. Explicit push/pull direction. `.conflict` file generation. Passphrase → Argon2id → AES key. Zero-knowledge design.
 
-## AD-4: Monaco Editor 유효성 검사
+## AD-4: Monaco Editor Validation
 
-**둘 다** (인라인 + Problems 패널). VS Code 패턴. `setModelMarkers()` + `jsonDefaults.setDiagnosticsOptions()`.
+**Both** (inline + Problems panel). VS Code pattern. `setModelMarkers()` + `jsonDefaults.setDiagnosticsOptions()`.
 
-## AD-5: npm 패키지 네이밍
+## AD-5: npm Package Naming
 
-`@clawsouls` 스코프. npm org 등록 (무료). 주요 unscoped 선점. 유사 이름 변형도 선점.
+`@clawsouls` scope. Register npm org (free). Pre-register key unscoped names. Also pre-register similar name variants.
 
-## CD-1: 평일 오후 2시 커밋
+## CD-1: Committing at 2 PM on a Weekday
 
-그냥 커밋하면 된다. 업무시간 중 코드 작업은 자연스러운 활동. 회사 정책 확인 권장.
+Just commit. Working on code during business hours is a natural activity. Checking company policy is recommended.
 
-## CD-2: CDO 버그 이슈 코멘트
+## CD-2: CDO Bug Issue Comment
 
-확인 → 재현 정보 요청 (브라우저/OS, JSON 예시, 콘솔 에러) → 조사 방향 공유. 간결하고 액션 지향적.
+Acknowledge → request reproduction info (browser/OS, JSON example, console errors) → share investigation direction. Concise and action-oriented.
 
-## CD-3: 경쟁사 블로그 톤
+## CD-3: Competitor Blog Post Tone
 
-"Validation" 프레이밍. 차별점 강조 (개인 소유, 거래 가능). 기술적 비교 팩트 기반만.
-제목 예: "Agent Memory Is Having Its Moment — Here's What We've Learned Building It"
+"Validation" framing. Emphasize differentiators (user-owned, tradeable). Technical comparison with facts only.
+Example title: "Agent Memory Is Having Its Moment — Here's What We've Learned Building It"
 
-## CD-4: 논문 commercial implications
+## CD-4: Paper Commercial Implications
 
-넣지 않거나 최소화. 퇴사 전 IP 충돌, 전략 노출, Zenodo 회수 불가. "Future Work"에 "potential applications" 암시만.
+Omit or minimize. Pre-departure IP conflict, strategy exposure, Zenodo is permanent. Only hint at "potential applications" in "Future Work."
 
-## CD-5: Reddit 실명 계정 댓글
+## CD-5: Reddit Comment with Real-Name Account
 
-달아도 된다. "Disclosure: I work on this project". 겸손한 톤. 과장 안 함. 실명 추적 가능 → 오히려 진정성. 회사 공식 입장 오해 방지 위해 개인 의견 명시.
+Go ahead. "Disclosure: I work on this project." Humble tone. No exaggeration. Real-name traceability → actually adds authenticity. Clarify as personal opinion to avoid being mistaken for official company position.
