@@ -59,6 +59,14 @@ We will provide anonymized versions within 2 weeks of request. Please include:
 - How the data will be stored and protected
 - Expected publication/use of the data
 
+## Language & Reproducibility Notice
+
+> **Original experiment was conducted in Korean.** Both the agent's working memory and the evaluation tasks were in Korean, as this reflects the natural working language of the human-agent collaboration.
+>
+> English translations of the taskset, rubric, and responses are provided for international accessibility (see `*_KO.md` files for Korean originals). Memory files in `synthetic-memory/` and private experiential memory remain in Korean — this is an inherent part of the experimental conditions, not a limitation to be corrected.
+>
+> **Replication in English** may yield different absolute scores due to language-dependent LLM behavior, but is expected to preserve relative rankings across conditions. We welcome cross-language replication studies.
+
 ## Experiment Environment
 
 - **LLM**: Claude Opus 4 (Anthropic)
