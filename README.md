@@ -33,13 +33,12 @@ This dataset accompanies a controlled experiment comparing four memory condition
 ├── README.md                       # This file
 ├── taskset.md                      # 20 evaluation tasks (English)
 ├── taskset_KO.md                   # 20 evaluation tasks (Korean, original)
+├── spawn-prompts.md                # Exact prompts used per condition (sanitized)
 ├── evaluation/
 │   ├── rubric.md                   # Scoring rubric (1-5 Likert, English)
 │   ├── rubric_KO.md                # Scoring rubric (Korean)
 │   ├── scores.csv                  # Raw scores per condition per task
 │   └── protocol.md                 # Blind evaluation protocol
-├── experiment/
-│   └── spawn-prompts.md            # Exact prompts used per condition (sanitized)
 ├── synthetic-memory/               # Condition B: 20 synthetic memory files
 │   ├── nextjs-supabase.md
 │   ├── soul-spec.md
@@ -82,7 +81,7 @@ We will provide anonymized versions within 2 weeks of request. Please include:
 - **Method**: Each condition was run in a separate, isolated session with memory folder swap as the only variable
 - **Memory retrieval**: Semantic search (RAG) over the memory corpus — the agent queries relevant memory files per task, not the entire corpus at once
 - **Evaluation**: Single human evaluator, blind (shuffled W/X/Y/Z labels)
-- **Exact prompts**: See `experiment/spawn-prompts.md` for the sanitized prompts used per condition
+- **Exact prompts**: See `spawn-prompts.md` for the sanitized prompts used per condition
 
 ## Reproducing the Experiment
 
@@ -99,7 +98,7 @@ To reproduce faithfully:
 2. Place experiential memory files in the agent's memory directory
 3. Place synthetic memory files in a separate directory
 4. Configure the same LLM (Claude Opus 4 or comparable)
-5. Use the prompts from `experiment/spawn-prompts.md`, replacing `<MEMORY_DIR>`, `<SYNTHETIC_DIR>`, and `<TASK_FILE>` with your paths
+5. Use the prompts from `spawn-prompts.md`, replacing `<MEMORY_DIR>`, `<SYNTHETIC_DIR>`, and `<TASK_FILE>` with your paths
 6. Run each condition in isolation and record responses
 
 **Note**: RAG introduces non-determinism — the exact memory snippets retrieved per query may vary. This is inherent to the experimental design and reflects real-world agent behavior.
