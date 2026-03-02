@@ -70,7 +70,7 @@ We will provide anonymized versions within 2 weeks of request. Please include:
 ## Experiment Environment
 
 - **LLM**: Claude Opus 4 (Anthropic)
-- **Framework**: OpenClaw (isolated sessions via `sessions_spawn`)
+- **Framework**: Isolated sessions with Claude Opus 4 (each condition run in a separate session with memory folder swap as the only variable)
 - **Machine**: Apple Mac mini (arm64, macOS)
 - **Memory retrieval**: Semantic search (`memory_search`) + targeted read (`memory_get`)
 - **Evaluation**: Single human evaluator, blind (shuffled W/X/Y/Z labels)
