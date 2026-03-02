@@ -70,10 +70,57 @@ We will provide anonymized versions within 2 weeks of request. Please include:
 ## Experiment Environment
 
 - **LLM**: Claude Opus 4 (Anthropic)
-- **Framework**: Isolated sessions with Claude Opus 4 (each condition run in a separate session with memory folder swap as the only variable)
+- **Method**: Each condition was run in a separate, isolated conversation with memory folder swap as the only variable
 - **Machine**: Apple Mac mini (arm64, macOS)
-- **Memory retrieval**: Semantic search (`memory_search`) + targeted read (`memory_get`)
+- **Memory retrieval**: Semantic search + targeted file read (RAG pipeline)
 - **Evaluation**: Single human evaluator, blind (shuffled W/X/Y/Z labels)
+
+## Reproducing the Experiment
+
+This experiment can be reproduced using any Claude interface (API, claude.ai web, or any compatible agent framework). No specific tooling is required.
+
+### Steps
+
+1. **Start a new conversation** with Claude Opus (or comparable model) for each condition.
+2. **Set the system prompt** using the soul spec from `soul-spec-anonymized/`.
+3. **Load memory files** into the conversation context:
+   - **Condition A**: Experiential memory files (request from authors, or use your own agent's memory)
+   - **Condition B**: Synthetic memory files from `synthetic-memory/`
+   - **Condition C**: Both A + B combined
+   - **Condition D**: No memory (baseline)
+4. **Send each task** from `taskset.md` and record the response.
+5. **Evaluate** responses using the rubric in `evaluation/rubric.md`.
+
+### Using Claude.ai (Web)
+
+- Start a new conversation per condition (use incognito/private mode to avoid context bleed)
+- Paste the soul spec as the first message, then paste relevant memory files
+- Send tasks one at a time in the same conversation
+
+### Using Claude API
+
+```python
+import anthropic
+
+client = anthropic.Anthropic()
+
+# Load soul spec and memory files as system prompt
+system_prompt = open("soul-spec-anonymized/SOUL.md").read()
+memory_context = "\n\n".join(open(f).read() for f in memory_files)
+
+response = client.messages.create(
+    model="claude-opus-4-20250514",
+    system=f"{system_prompt}\n\n## Memory Files\n{memory_context}",
+    messages=[{"role": "user", "content": task_text}]
+)
+```
+
+### Key Requirements for Valid Replication
+
+- **Isolation**: Each condition must run in a completely separate session (no cross-contamination)
+- **Same model**: Use the same Claude model version across all conditions
+- **Blind evaluation**: Shuffle condition labels before scoring to prevent evaluator bias
+- **Same tasks**: Use the exact tasks from `taskset.md` without modification
 
 ## Citation
 
